@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">UTS_PAM</string>
+    <string name="deskripsi">
+        perpustakaan digital yang memudahkan anda menemukan dan menikmati berbagai koleksi buku untuk sumber daya belajar. Jelajahi dunia pengetahuan hanya dengan satu sentuhan jari!
+    </string>
+    <string name="button_text">Selanjutnya</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="add">AddBook</string>
+    <string name="manajemen_buku_perpustakaan">Manajemen Buku Perpustakaan</string>
+</resources>
