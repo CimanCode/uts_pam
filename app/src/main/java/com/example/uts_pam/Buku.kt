@@ -1,11 +1,8 @@
 package com.example.uts_pam
 
-import java.sql.Blob
-
 data class Buku(
-    val id: Int,
-    val judulBuku: String,
+    val namaBuku: String,
     val penulisBuku: String,
-    val gambarBuku: Blob,
+    val gambarBuku: String,
     val deskripsi: String
 )

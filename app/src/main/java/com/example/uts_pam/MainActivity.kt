@@ -19,5 +19,7 @@ class MainActivity : AppCompatActivity() {
             val next =Intent(this, LoginActivity::class.java)
             startActivity(next)
         }
+
+
     }
 }

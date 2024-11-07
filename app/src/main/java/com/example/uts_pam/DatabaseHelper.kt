@@ -17,26 +17,43 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         private const val COLUMN_ID = "id"
         private const val COLUMN_EMAIL = "email"
         private const val COLUMN_PASSWORD = "password"
-        private const val TABLE_BUKU = "buku"
-        private const val COLUMN_ID_BOOK = "id"
-        private const val COLUMN_JUDUL = "judulBuku"
-        private const val COLUMN_PENULIS = "penulisBuku"
-        private const val COLUMN_GAMBAR = "gambarBuku"
-        private const val COLUMN_DESKRIPSI = "deskripsi"
+        private const val TABLE_BOOK = "books"
+        private const val ID_BOOK = "id";
+        private const val JUDUL_BOOK = "Judul"
+        private const val PENULIS_BOOK = "Penulis"
+        private const val GAMBAR_BOOK = "Gambar"
+        private const val DESKRIPSI = "Deskripsi"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val QcreateTable = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_EMAIL TEXT, $COLUMN_PASSWORD TEXT)"
-        val QcreateTableBook = "CREATE TABLE $TABLE_BUKU ($COLUMN_ID_BOOK INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_JUDUL TEXT, $COLUMN_PENULIS TEXT, $COLUMN_GAMBAR BLOB, $COLUMN_DESKRIPSI TEXT)"
-        db?.execSQL(QcreateTable)
-        db?.execSQL(QcreateTableBook)
+        // Query untuk tabel user
+        val createUserTable = """
+            CREATE TABLE $TABLE_NAME (
+                $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_EMAIL TEXT NOT NULL,
+                $COLUMN_PASSWORD TEXT NOT NULL
+            )
+        """.trimIndent()
+
+        // Query untuk tabel books
+        val createBooksTable = """
+            CREATE TABLE $TABLE_BOOK (
+                $ID_BOOK INTEGER PRIMARY KEY AUTOINCREMENT,
+                $JUDUL_BOOK TEXT NOT NULL,
+                $PENULIS_BOOK TEXT NOT NULL,
+                $GAMBAR_BOOK TEXT,
+                $DESKRIPSI TEXT
+            )
+        """.trimIndent()
+
+        // Eksekusi query
+        db?.execSQL(createUserTable)
+        db?.execSQL(createBooksTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val QdropTable = "DROP TABLE IF EXISTS $TABLE_NAME"
-        val QdropTableBook = "DROP TABLE IF EXISTS $TABLE_BUKU"
         db?.execSQL(QdropTable)
-        db?.execSQL(QdropTableBook)
         onCreate(db)
     }
 
@@ -67,5 +84,20 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         db.close()
         return isLogin
     }
+
+    fun insertBook(book: Buku): Boolean {
+        val db = writableDatabase
+        val dataBook = ContentValues().apply {
+            put(JUDUL_BOOK, book.namaBuku)
+            put(PENULIS_BOOK, book.penulisBuku)
+            put(GAMBAR_BOOK, book.gambarBuku)
+            put(DESKRIPSI, book.deskripsi)
+        }
+
+        val result = db.insert(TABLE_BOOK, null, dataBook)
+        db.close()
+        return result != -1L
+    }
+
 
 }
