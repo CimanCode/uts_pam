@@ -17,16 +17,26 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         private const val COLUMN_ID = "id"
         private const val COLUMN_EMAIL = "email"
         private const val COLUMN_PASSWORD = "password"
+        private const val TABLE_BUKU = "buku"
+        private const val COLUMN_ID_BOOK = "id"
+        private const val COLUMN_JUDUL = "judulBuku"
+        private const val COLUMN_PENULIS = "penulisBuku"
+        private const val COLUMN_GAMBAR = "gambarBuku"
+        private const val COLUMN_DESKRIPSI = "deskripsi"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val QcreateTable = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_EMAIL TEXT, $COLUMN_PASSWORD TEXT)"
+        val QcreateTableBook = "CREATE TABLE $TABLE_BUKU ($COLUMN_ID_BOOK INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_JUDUL TEXT, $COLUMN_PENULIS TEXT, $COLUMN_GAMBAR BLOB, $COLUMN_DESKRIPSI TEXT)"
         db?.execSQL(QcreateTable)
+        db?.execSQL(QcreateTableBook)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val QdropTable = "DROP TABLE IF EXISTS $TABLE_NAME"
+        val QdropTableBook = "DROP TABLE IF EXISTS $TABLE_BUKU"
         db?.execSQL(QdropTable)
+        db?.execSQL(QdropTableBook)
         onCreate(db)
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
@@ -10,7 +11,7 @@
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Management Buku Perpustakaan"
+        android:text="@string/management_buku_perpustakaan"
         android:textSize="20sp"
         android:textStyle="bold"
         android:padding="16dp"
@@ -21,6 +22,7 @@
 
     <!-- Card untuk Form Tambah Buku -->
     <LinearLayout
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:id="@+id/form_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,7 +44,7 @@
                 android:id="@+id/form_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TAMBAH BUKU"
+                android:text="@string/tambah_buku"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="#000000"
@@ -55,10 +57,10 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                android:tint="@color/black"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:contentDescription="Close" />
+                android:contentDescription="@string/close"
+                app:tint="@color/black" />
 
             <!-- Garis di Bawah Judul Form -->
             <View
@@ -73,7 +75,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Judul Buku"
+            android:text="@string/judul_buku"
             android:textStyle="bold"
             android:textColor="#000000"
 
@@ -83,7 +85,7 @@
             android:id="@+id/judul_buku"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Masukan judul buku"
+            android:hint="@string/masukan_judul_buku"
             android:background="#E0E0E0"
             android:padding="10dp"
             android:layout_marginBottom="8dp" />
@@ -92,7 +94,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Penulis Buku"
+            android:text="@string/penulis_buku"
             android:textColor="#000000"
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
@@ -101,7 +103,7 @@
             android:id="@+id/penulis_buku"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Masukan penulis buku"
+            android:hint="@string/masukan_penulis_buku"
             android:background="#E0E0E0"
             android:padding="10dp"
             android:layout_marginBottom="8dp" />
@@ -110,12 +112,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gambar Buku"
+            android:text="@string/gambar_buku"
             android:textColor="#000000"
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:backgroundTint="@color/white"
@@ -123,10 +126,10 @@
             android:layout_marginBottom="16dp"/>
 
         <Button
-            android:id="@+id/btn_gambar_buku"
+            android:id="@+id/buttonSelectImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose File"
+            android:text="@string/choose_file"
             android:background="@drawable/rounded"
             android:textColor="@color/white"
             android:layout_marginBottom="8dp" />
@@ -135,7 +138,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Deskripsi Buku"
+            android:text="@string/deskripsi_buku"
             android:textColor="#000000"
             android:textStyle="bold"
             android:layout_marginBottom="4dp" />
@@ -144,7 +147,7 @@
             android:id="@+id/deskripsi_buku"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Deskripsi........."
+            android:hint="@string/deskripsi_book"
             android:background="#E0E0E0"
             android:padding="10dp"
             android:layout_marginBottom="16dp"
@@ -156,7 +159,7 @@
             android:id="@+id/tambah_buku_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tambahkan Buku"
+            android:text="@string/tambahkan_buku"
             android:textStyle="bold"
             android:background="@drawable/rounded"
             android:textColor="#FFFFFF"
