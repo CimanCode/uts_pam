@@ -1,4 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- res/drawable/rounded_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Warna latar belakang -->
+    <solid android:color="#FFFFFF" /> <!-- Sesuaikan dengan warna yang diinginkan -->
 
-</selector>
+    <!-- Radius untuk membuat sudut melengkung -->
+    <corners android:radius="50dp" /> <!-- Sesuaikan radius untuk melengkungkan sudut -->
+
+    <!-- Opsional: Tambahkan border (garis tepi) -->
+    <stroke
+        android:width="2dp"
+        android:color="#4FC3F7" /> <!-- Sesuaikan dengan warna border yang diinginkan -->
+</shape>
