@@ -16,7 +16,7 @@
         android:padding="16dp"
         android:background="#ffffff"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="15dp"
         android:textColor="#133E87" />
 
     <!-- Card untuk Form Tambah Buku -->
@@ -31,7 +31,7 @@
             android:padding="16dp"
             android:background="#608BC1"
             android:layout_below="@id/title_text"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="85dp"
             android:elevation="4dp">
 
             <!-- Container untuk Judul Form dan Icon X -->
@@ -88,7 +88,8 @@
                 android:hint="Masukan judul buku"
                 android:background="#E0E0E0"
                 android:padding="10dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:textColor="#000000" />
 
             <!-- Form Input Penulis Buku -->
             <TextView
@@ -106,7 +107,8 @@
                 android:hint="Masukan penulis buku"
                 android:background="#E0E0E0"
                 android:padding="10dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:textColor="#000000" />
 
             <!-- Form Input Gambar Buku -->
             <TextView
@@ -152,7 +154,8 @@
                 android:padding="10dp"
                 android:layout_marginBottom="16dp"
                 android:inputType="textMultiLine"
-                android:minLines="3" />
+                android:minLines="3"
+                android:textColor="#000000" />
 
             <!-- Tombol Tambah Buku -->
             <Button
@@ -164,7 +167,7 @@
                 android:background="@drawable/rounded"
                 android:textColor="#FFFFFF"
                 android:padding="12dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="80dp"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>

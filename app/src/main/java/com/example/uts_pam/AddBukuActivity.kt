@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import android.content.pm.PackageManager
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,7 +26,6 @@ class AddBukuActivity : AppCompatActivity() {
     private lateinit var gambar_buku: ImageView
     private lateinit var db: DatabaseHelper
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,43 +41,41 @@ class AddBukuActivity : AppCompatActivity() {
         db = DatabaseHelper(this)
 
         btn_pilih_buku.setOnClickListener {
-            // Buka kamera
+            checkCameraPermission()
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if (cameraIntent.resolveActivity(packageManager) != null) {
                 val photoFile = createImageFile()
-                val photoURI = FileProvider.getUriForFile(
-                    this,
-                    "${applicationContext.packageName}.provider",
-                    photoFile
-                )
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+                if (photoFile != null) {
+                    val photoURI = FileProvider.getUriForFile(
+                        this,
+                        "${applicationContext.packageName}.provider",
+                        photoFile
+                    )
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+                } else {
+                    Toast.makeText(this, "Gagal membuat file gambar", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
         btn_submit.setOnClickListener {
-            val judul = judul_buku.text.toString().trim()
-            val penulis = penulis_buku.text.toString().trim()
-            val gambar = currentPhotoPath // Path dari gambar yang diambil
-            val deskripsi = deskripsi_buku.text.toString().trim()
+            // Logika menyimpan data
+        }
+    }
 
-            if (judul.isEmpty() || penulis.isEmpty() || deskripsi.isEmpty() || gambar.isEmpty()) {
-                Toast.makeText(this, "Semua field wajib diisi!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+    private fun checkCameraPermission() {
+        if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+        }
+    }
 
-            val addBuku = Buku(judul, penulis, gambar, deskripsi)
-            val isInserted = db.insertBook(addBuku)
-
-            if (isInserted) {
-                Toast.makeText(this, "Buku berhasil disimpan", Toast.LENGTH_SHORT).show()
-                judul_buku.text.clear()
-                penulis_buku.text.clear()
-                deskripsi_buku.text.clear()
-                gambar_buku.setImageResource(0) // Hapus gambar di ImageView
-            } else {
-                Toast.makeText(this, "Gagal menyimpan buku", Toast.LENGTH_SHORT).show()
-            }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Izin kamera diberikan", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Izin kamera ditolak", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -98,3 +96,4 @@ class AddBukuActivity : AppCompatActivity() {
         }
     }
 }
+
