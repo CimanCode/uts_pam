@@ -3,7 +3,6 @@ package com.example.uts_pam
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
-import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -17,16 +16,26 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         private const val COLUMN_ID = "id"
         private const val COLUMN_EMAIL = "email"
         private const val COLUMN_PASSWORD = "password"
+        private const val TABLE_BUKU = "buku"
+        private const val COLUMN_ID_BOOK = "id"
+        private const val COLUMN_JUDUL = "judulBuku"
+        private const val COLUMN_PENULIS = "penulisBuku"
+        private const val COLUMN_GAMBAR = "gambarBuku"
+        private const val COLUMN_DESKRIPSI = "deskripsi"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val QcreateTable = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_EMAIL TEXT, $COLUMN_PASSWORD TEXT)"
+        val QcreateTableBook = "CREATE TABLE $TABLE_BUKU ($COLUMN_ID_BOOK INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_JUDUL TEXT, $COLUMN_PENULIS TEXT, $COLUMN_GAMBAR BLOB, $COLUMN_DESKRIPSI TEXT)"
         db?.execSQL(QcreateTable)
+        db?.execSQL(QcreateTableBook)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val QdropTable = "DROP TABLE IF EXISTS $TABLE_NAME"
+        val QdropTableBook = "DROP TABLE IF EXISTS $TABLE_BUKU"
         db?.execSQL(QdropTable)
+        db?.execSQL(QdropTableBook)
         onCreate(db)
     }
 
@@ -56,6 +65,40 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         cursor.close()
         db.close()
         return isLogin
+    }
+
+    fun insertDataBuku(image: ByteArray?, judul: String, penulis: String, deskripsi: String) {
+        val db = writableDatabase
+        val dataBuku = ContentValues().apply {
+            put(COLUMN_JUDUL, judul)
+            put(COLUMN_PENULIS, penulis)
+            put(COLUMN_GAMBAR, image)
+            put(COLUMN_DESKRIPSI, deskripsi)
+        }
+        db.insert(TABLE_BUKU, null, dataBuku).also { db.close() }
+    }
+
+    fun getAllBuku() : List<Buku> {
+        val bukuList = mutableListOf<Buku>()
+        val db = readableDatabase
+        val queryGetAllData = "SELECT * FROM $TABLE_BUKU"
+        val cursor = db.rawQuery(queryGetAllData, null)
+        if(cursor.moveToFirst()){
+            do {
+                val book = Buku(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID_BOOK)),
+                    judulBuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JUDUL)),
+                    penulisBuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PENULIS)),
+                    gambarBuku = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_GAMBAR)),
+                    deskripsi = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESKRIPSI))
+                )
+                bukuList.add(book)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return bukuList
     }
 
 }

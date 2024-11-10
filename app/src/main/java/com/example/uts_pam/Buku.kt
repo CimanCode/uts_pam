@@ -2,8 +2,8 @@ package com.example.uts_pam
 
 data class Buku(
     val id: Int,
-    val namaBuku: String,
+    val judulBuku: String,
     val penulisBuku: String,
-    val gambarBuku: String,
+    val gambarBuku: ByteArray?,
     val deskripsi: String
 )

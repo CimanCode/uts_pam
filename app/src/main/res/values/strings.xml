@@ -11,4 +11,20 @@
     <string name="password_hint">Password</string>
     <string name="add">AddBook</string>
     <string name="manajemen_buku_perpustakaan">Manajemen Buku Perpustakaan</string>
+    <string name="management_buku_perpustakaan">Management Buku Perpustakaan</string>
+    <string name="tambah_buku">TAMBAH BUKU</string>
+    <string name="close">Close</string>
+    <string name="judul_buku">Judul Buku</string>
+    <string name="masukan_judul_buku">Masukan judul buku</string>
+    <string name="penulis_buku">Penulis Buku</string>
+    <string name="masukan_penulis_buku">Masukan penulis buku</string>
+    <string name="gambar_buku">Gambar Buku</string>
+    <string name="choose_file">Choose File</string>
+    <string name="deskripsi_buku">Deskripsi Buku</string>
+    <string name="deskripsi_book">Deskripsi</string>
+    <string name="tambahkan_buku">Tambahkan Buku</string>
+    <string name="deskripsi_view_book">Deskripsi</string>
+    <string name="judul">Judul</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>
