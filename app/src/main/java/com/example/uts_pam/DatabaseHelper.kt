@@ -3,7 +3,6 @@ package com.example.uts_pam
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
-import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -66,6 +65,40 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         cursor.close()
         db.close()
         return isLogin
+    }
+
+    fun insertDataBuku(image: ByteArray?, judul: String, penulis: String, deskripsi: String) {
+        val db = writableDatabase
+        val dataBuku = ContentValues().apply {
+            put(COLUMN_JUDUL, judul)
+            put(COLUMN_PENULIS, penulis)
+            put(COLUMN_GAMBAR, image)
+            put(COLUMN_DESKRIPSI, deskripsi)
+        }
+        db.insert(TABLE_BUKU, null, dataBuku).also { db.close() }
+    }
+
+    fun getAllBuku() : List<Buku> {
+        val bukuList = mutableListOf<Buku>()
+        val db = readableDatabase
+        val queryGetAllData = "SELECT * FROM $TABLE_BUKU"
+        val cursor = db.rawQuery(queryGetAllData, null)
+        if(cursor.moveToFirst()){
+            do {
+                val book = Buku(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID_BOOK)),
+                    judulBuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JUDUL)),
+                    penulisBuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PENULIS)),
+                    gambarBuku = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_GAMBAR)),
+                    deskripsi = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESKRIPSI))
+                )
+                bukuList.add(book)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return bukuList
     }
 
 }

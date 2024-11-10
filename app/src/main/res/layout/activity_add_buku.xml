@@ -82,7 +82,7 @@
             android:layout_marginBottom="4dp" />
 
         <EditText
-            android:id="@+id/judul_buku"
+            android:id="@+id/judulbuku"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/masukan_judul_buku"
@@ -100,7 +100,7 @@
             android:layout_marginBottom="4dp" />
 
         <EditText
-            android:id="@+id/penulis_buku"
+            android:id="@+id/penulisbuku"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/masukan_penulis_buku"
@@ -144,7 +144,7 @@
             android:layout_marginBottom="4dp" />
 
         <EditText
-            android:id="@+id/deskripsi_buku"
+            android:id="@+id/deskripsibuku"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/deskripsi_book"
@@ -156,7 +156,7 @@
 
         <!-- Tombol Tambah Buku -->
         <Button
-            android:id="@+id/tambah_buku_button"
+            android:id="@+id/tambahbukubutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tambahkan_buku"

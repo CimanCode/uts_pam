@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.UTS_PAM" parent="Base.Theme.UTS_PAM" />
+    
+    <style name="CustomPopUp" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textSize">12sp</item> <!-- Ukuran teks lebih kecil -->
+        <item name="android:padding">4dp</item>
+    </style>
 </resources>
