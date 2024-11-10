@@ -1,99 +1,80 @@
 package com.example.uts_pam
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
-import android.content.pm.PackageManager
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.uts_pam.databinding.ActivityAddBukuBinding
+import java.io.ByteArrayOutputStream
 
 class AddBukuActivity : AppCompatActivity() {
-    private val CAMERA_REQUEST_CODE = 1
-    private lateinit var currentPhotoPath: String
-
-    private lateinit var gambar_buku: ImageView
+    private lateinit var binding: ActivityAddBukuBinding
     private lateinit var db: DatabaseHelper
-
+    private var imageData : ByteArray? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivityAddBukuBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_add_buku)
-
-        val judul_buku: EditText = findViewById(R.id.judul_buku)
-        val penulis_buku: EditText = findViewById(R.id.penulis_buku)
-        gambar_buku = findViewById(R.id.gambar_buku)
-        val btn_pilih_buku: Button = findViewById(R.id.btn_pilih_buku)
-        val deskripsi_buku: EditText = findViewById(R.id.deskripsi_buku)
-        val btn_submit: Button = findViewById(R.id.btn_submit)
-
+        setContentView(binding.root)
         db = DatabaseHelper(this)
-
-        btn_pilih_buku.setOnClickListener {
-            checkCameraPermission()
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (cameraIntent.resolveActivity(packageManager) != null) {
-                val photoFile = createImageFile()
-                if (photoFile != null) {
-                    val photoURI = FileProvider.getUriForFile(
-                        this,
-                        "${applicationContext.packageName}.provider",
-                        photoFile
-                    )
-                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
-                } else {
-                    Toast.makeText(this, "Gagal membuat file gambar", Toast.LENGTH_SHORT).show()
-                }
-            }
+        binding.closeIcon.setOnClickListener {
+            val intent = Intent(this, ListBookActivity::class.java)
+            startActivity(intent)
         }
+        binding.buttonSelectImage.setOnClickListener { openImagePicker() }
+        binding.tambahbukubutton.setOnClickListener { saveDataToDatabase() }
+    }
 
-        btn_submit.setOnClickListener {
-            // Logika menyimpan data
+    // Image picker launcher
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val uri = data?.data
+            uri?.let {
+                val inputStream = contentResolver.openInputStream(uri)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                binding.imageView.setImageBitmap(bitmap)
+                imageData = bitmapToByteArray(bitmap)
+            } ?: Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun checkCameraPermission() {
-        if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+    private fun openImagePicker() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        imagePickerLauncher.launch(intent)
+    }
+
+    private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
+    }
+
+    private fun saveDataToDatabase() {
+        val judul = binding.judulbuku.text.toString()
+        val penulis = binding.penulisbuku.text.toString()
+        val deskripsi = binding.deskripsibuku.text.toString()
+        if(judul.isNotEmpty() && penulis.isNotEmpty() && deskripsi.isNotEmpty()){
+            val id = db.insertDataBuku(imageData, judul, penulis, deskripsi)
+            finish()
+            Toast.makeText(this, "Data Bukur Berhasil Disimpan : $id", Toast.LENGTH_SHORT).show()
+            binding.judulbuku.text.clear()
+            binding.penulisbuku.text.clear()
+            binding.deskripsibuku.text.clear()
+        }  else {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Izin kamera diberikan", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Izin kamera ditolak", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun createImageFile(): File {
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("JPEG_${timestamp}_", ".jpg", storageDir).apply {
-            currentPhotoPath = absolutePath
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
-            gambar_buku.setImageBitmap(bitmap) // Tampilkan gambar di ImageView
-        }
-    }
 }
-

@@ -3,7 +3,6 @@ package com.example.uts_pam
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
-import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -17,43 +16,26 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         private const val COLUMN_ID = "id"
         private const val COLUMN_EMAIL = "email"
         private const val COLUMN_PASSWORD = "password"
-        private const val TABLE_BOOK = "books"
-        private const val ID_BOOK = "id";
-        private const val JUDUL_BOOK = "Judul"
-        private const val PENULIS_BOOK = "Penulis"
-        private const val GAMBAR_BOOK = "Gambar"
-        private const val DESKRIPSI = "Deskripsi"
+        private const val TABLE_BUKU = "buku"
+        private const val COLUMN_ID_BOOK = "id"
+        private const val COLUMN_JUDUL = "judulBuku"
+        private const val COLUMN_PENULIS = "penulisBuku"
+        private const val COLUMN_GAMBAR = "gambarBuku"
+        private const val COLUMN_DESKRIPSI = "deskripsi"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        // Query untuk tabel user
-        val createUserTable = """
-            CREATE TABLE $TABLE_NAME (
-                $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COLUMN_EMAIL TEXT NOT NULL,
-                $COLUMN_PASSWORD TEXT NOT NULL
-            )
-        """.trimIndent()
-
-        // Query untuk tabel books
-        val createBooksTable = """
-            CREATE TABLE $TABLE_BOOK (
-                $ID_BOOK INTEGER PRIMARY KEY AUTOINCREMENT,
-                $JUDUL_BOOK TEXT NOT NULL,
-                $PENULIS_BOOK TEXT NOT NULL,
-                $GAMBAR_BOOK TEXT,
-                $DESKRIPSI TEXT
-            )
-        """.trimIndent()
-
-        // Eksekusi query
-        db?.execSQL(createUserTable)
-        db?.execSQL(createBooksTable)
+        val QcreateTable = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_EMAIL TEXT, $COLUMN_PASSWORD TEXT)"
+        val QcreateTableBook = "CREATE TABLE $TABLE_BUKU ($COLUMN_ID_BOOK INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_JUDUL TEXT, $COLUMN_PENULIS TEXT, $COLUMN_GAMBAR BLOB, $COLUMN_DESKRIPSI TEXT)"
+        db?.execSQL(QcreateTable)
+        db?.execSQL(QcreateTableBook)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val QdropTable = "DROP TABLE IF EXISTS $TABLE_NAME"
+        val QdropTableBook = "DROP TABLE IF EXISTS $TABLE_BUKU"
         db?.execSQL(QdropTable)
+        db?.execSQL(QdropTableBook)
         onCreate(db)
     }
 
@@ -85,19 +67,38 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         return isLogin
     }
 
-    fun insertBook(book: Buku): Boolean {
+    fun insertDataBuku(image: ByteArray?, judul: String, penulis: String, deskripsi: String) {
         val db = writableDatabase
-        val dataBook = ContentValues().apply {
-            put(JUDUL_BOOK, book.namaBuku)
-            put(PENULIS_BOOK, book.penulisBuku)
-            put(GAMBAR_BOOK, book.gambarBuku)
-            put(DESKRIPSI, book.deskripsi)
+        val dataBuku = ContentValues().apply {
+            put(COLUMN_JUDUL, judul)
+            put(COLUMN_PENULIS, penulis)
+            put(COLUMN_GAMBAR, image)
+            put(COLUMN_DESKRIPSI, deskripsi)
         }
-
-        val result = db.insert(TABLE_BOOK, null, dataBook)
-        db.close()
-        return result != -1L
+        db.insert(TABLE_BUKU, null, dataBuku).also { db.close() }
     }
 
+    fun getAllBuku() : List<Buku> {
+        val bukuList = mutableListOf<Buku>()
+        val db = readableDatabase
+        val queryGetAllData = "SELECT * FROM $TABLE_BUKU"
+        val cursor = db.rawQuery(queryGetAllData, null)
+        if(cursor.moveToFirst()){
+            do {
+                val book = Buku(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID_BOOK)),
+                    judulBuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JUDUL)),
+                    penulisBuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PENULIS)),
+                    gambarBuku = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_GAMBAR)),
+                    deskripsi = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESKRIPSI))
+                )
+                bukuList.add(book)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return bukuList
+    }
 
 }

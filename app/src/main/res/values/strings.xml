@@ -23,4 +23,8 @@
     <string name="deskripsi_buku">Deskripsi Buku</string>
     <string name="deskripsi_book">Deskripsi</string>
     <string name="tambahkan_buku">Tambahkan Buku</string>
+    <string name="deskripsi_view_book">Deskripsi</string>
+    <string name="judul">Judul</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>
