@@ -27,4 +27,5 @@
     <string name="judul">Judul</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="edit_buku">Edit Buku</string>
 </resources>
