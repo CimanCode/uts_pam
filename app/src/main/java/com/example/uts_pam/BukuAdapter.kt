@@ -2,6 +2,7 @@ package com.example.uts_pam
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
@@ -65,7 +66,10 @@ RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_edit -> {
-                        // Logika untuk edit item
+                        val intent = Intent(holder.itemView.context, UpdateBukuActivity::class.java).apply {
+                            putExtra("idbuku", book.id)
+                        }
+                        holder.itemView.context.startActivity(intent)
                         Toast.makeText(view.context, "Edit ${book.judulBuku}", Toast.LENGTH_SHORT).show()
                         true
                     }

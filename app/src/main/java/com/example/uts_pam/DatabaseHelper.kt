@@ -101,4 +101,19 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         return bukuList
     }
 
+    fun getBukuById(id: Int) : Buku {
+        val db = readableDatabase
+        val query = "SELECT * FROM $TABLE_BUKU WHERE $COLUMN_ID_BOOK = $id"
+        val cursor = db.rawQuery(query, null)
+        cursor.moveToFirst()
+        val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID_BOOK))
+        val judulbuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_JUDUL))
+        val penulisbuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PENULIS))
+        val gambarbuku = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_GAMBAR))
+        val deskripsibuku = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESKRIPSI))
+        cursor.close()
+        db.close()
+        return Buku(id, judulbuku, penulisbuku, gambarbuku, deskripsibuku)
+    }
+
 }

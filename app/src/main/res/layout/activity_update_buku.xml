@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#D4F6FF">
+
+    <!-- Judul Halaman -->
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/management_buku_perpustakaan"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:background="#ffffff"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:textColor="#133E87" />
+
+    <!-- Card untuk Form Tambah Buku -->
+    <LinearLayout
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbars="vertical"
+        android:id="@+id/form_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#608BC1"
+        android:layout_below="@id/title_text"
+        android:layout_marginTop="30dp"
+        android:elevation="4dp">
+
+        <!-- Container untuk Judul Form dan Icon X -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp">
+
+            <!-- Judul Form -->
+            <TextView
+                android:id="@+id/form_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_buku"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <!-- Icon X (Tombol Tutup) -->
+            <ImageView
+                android:id="@+id/close_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/close"
+                app:tint="@color/black" />
+
+            <!-- Garis di Bawah Judul Form -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/form_title"
+                android:layout_marginTop="8dp"
+                android:background="#000000" />
+        </RelativeLayout>
+
+        <!-- Form Input Judul Buku -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/judul_buku"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+
+                    android:layout_marginBottom="4dp" />
+
+                <EditText
+                    android:id="@+id/editjudulbuku"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/masukan_judul_buku"
+                    android:background="#E0E0E0"
+                    android:padding="10dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Form Input Penulis Buku -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/penulis_buku"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <EditText
+                    android:id="@+id/editpenulisbuku"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/masukan_penulis_buku"
+                    android:background="#E0E0E0"
+                    android:padding="10dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Form Input Gambar Buku -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gambar_buku"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <ImageView
+                    android:id="@+id/editimageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:backgroundTint="@color/white"
+                    android:background="@drawable/rounded_image_view"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/buttonSelectImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_file"
+                    android:background="@drawable/rounded"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Form Input Deskripsi Buku -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deskripsi_buku"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <EditText
+                    android:id="@+id/editdeskripsibuku"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/deskripsi_book"
+                    android:background="#E0E0E0"
+                    android:padding="10dp"
+                    android:layout_marginBottom="16dp"
+                    android:inputType="textMultiLine"
+                    android:minLines="3" />
+
+                <!-- Tombol Tambah Buku -->
+                <Button
+                    android:id="@+id/editbukubutton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tambahkan_buku"
+                    android:textStyle="bold"
+                    android:background="@drawable/rounded"
+                    android:textColor="#FFFFFF"
+                    android:padding="12dp"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>
