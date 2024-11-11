@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import com.example.uts_pam.databinding.ActivityAddBukuBinding
 import java.io.ByteArrayOutputStream
 
@@ -19,6 +20,7 @@ class AddBukuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddBukuBinding
     private lateinit var db: DatabaseHelper
     private var imageData : ByteArray? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityAddBukuBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -31,6 +33,7 @@ class AddBukuActivity : AppCompatActivity() {
         }
         binding.buttonSelectImage.setOnClickListener { openImagePicker() }
         binding.tambahbukubutton.setOnClickListener { saveDataToDatabase() }
+
     }
 
     // Image picker launcher
