@@ -7,14 +7,16 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 
-class BukuAdapter (private var buku: List<Buku>, context: Context) :
+class BukuAdapter (private var buku: List<Buku>, private val context: Context) :
 RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
 {
     private val db: DatabaseHelper = DatabaseHelper(context)
@@ -75,7 +77,7 @@ RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
                     }
                     R.id.action_delete -> {
                         // Logika untuk hapus item
-                        Toast.makeText(view.context, "Delete ${book.judulBuku}", Toast.LENGTH_SHORT).show()
+                        showDeleteConfirmationDialog(book, position)
                         true
                     }
                     else -> false
@@ -92,6 +94,28 @@ RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
     fun refreshData(newbuku: List<Buku>){
         buku = newbuku
         notifyDataSetChanged()
+    }
+
+    // Fungsi untuk menampilkan dialog konfirmasi delete
+    private fun showDeleteConfirmationDialog(book: Buku, position: Int) {
+        val dialog = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null)
+        val alertDialog = AlertDialog.Builder(context)
+            .setView(dialog)
+            .create()
+        dialog.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        dialog.findViewById<Button>(R.id.btnConfirm).setOnClickListener {
+            db.deleteDataBuku(book.id)
+            (buku as MutableList<Buku>).removeAt(position)
+            notifyItemRemoved(position)
+
+            Toast.makeText(context, "${book.judulBuku} berhasil dihapus", Toast.LENGTH_SHORT).show()
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
 }

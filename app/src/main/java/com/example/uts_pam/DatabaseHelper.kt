@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.appcompat.app.AlertDialog
 
 
 class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
@@ -114,6 +115,29 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         cursor.close()
         db.close()
         return Buku(id, judulbuku, penulisbuku, gambarbuku, deskripsibuku)
+    }
+
+    fun updateDataBuku(id: Int, image: ByteArray?, judul: String, penulis: String, deskripsi: String) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_JUDUL, judul)
+            put(COLUMN_GAMBAR, image)
+            put(COLUMN_PENULIS, penulis)
+            put(COLUMN_DESKRIPSI, deskripsi)
+        }
+
+        val where = "$COLUMN_ID_BOOK = ?"
+        val arg = arrayOf("$id")
+        db.update(TABLE_BUKU, values, where, arg)
+        db.close()
+    }
+
+    fun deleteDataBuku(id: Int){
+        val db = writableDatabase
+        val where = "$COLUMN_ID_BOOK = ?"
+        val arg = arrayOf("$id")
+        db.delete(TABLE_BUKU, where, arg)
+        db.close()
     }
 
 }
