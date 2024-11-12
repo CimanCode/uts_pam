@@ -129,5 +129,13 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         return success
     }
 
+    fun deleteBukuById(id: Int): Int {
+        val db = writableDatabase
+        val success = db.delete(TABLE_BUKU, "$COLUMN_ID_BOOK=?", arrayOf(id.toString()))
+        db.close()
+        return success
+    }
+
+
 
 }

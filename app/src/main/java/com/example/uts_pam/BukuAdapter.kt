@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
 
 class BukuAdapter (private var buku: List<Buku>, context: Context) :
 RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
@@ -74,8 +75,22 @@ RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
                         true
                     }
                     R.id.action_delete -> {
-                        // Logika untuk hapus item
-                        Toast.makeText(view.context, "Delete ${book.judulBuku}", Toast.LENGTH_SHORT).show()
+                        // Tampilkan dialog konfirmasi sebelum menghapus
+                        AlertDialog.Builder(view.context)
+                            .setMessage("Apakah anda yakin ingin menghapus buku ini?")
+                            .setPositiveButton("Ya") { dialog, _ ->
+                                // Jika dikonfirmasi, lanjutkan ke aktivitas penghapusan
+                                val intent = Intent(holder.itemView.context, DeleteBukuActivity::class.java).apply {
+                                    putExtra("idbuku", book.id)
+                                }
+                                holder.itemView.context.startActivity(intent)
+                                Toast.makeText(view.context, "Delete ${book.judulBuku}", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Tidak") { dialog, _ ->
+                                dialog.dismiss()  // Batalkan dialog
+                            }
+                            .show()
                         true
                     }
                     else -> false
