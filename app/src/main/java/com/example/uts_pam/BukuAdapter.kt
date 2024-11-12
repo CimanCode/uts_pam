@@ -7,16 +7,15 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
 
-class BukuAdapter (private var buku: List<Buku>, private val context: Context) :
+class BukuAdapter (private var buku: List<Buku>, context: Context) :
 RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
 {
     private val db: DatabaseHelper = DatabaseHelper(context)
@@ -76,8 +75,22 @@ RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
                         true
                     }
                     R.id.action_delete -> {
-                        // Logika untuk hapus item
-                        showDeleteConfirmationDialog(book, position)
+                        // Tampilkan dialog konfirmasi sebelum menghapus
+                        AlertDialog.Builder(view.context)
+                            .setMessage("Apakah anda yakin ingin menghapus buku ini?")
+                            .setPositiveButton("Ya") { dialog, _ ->
+                                // Jika dikonfirmasi, lanjutkan ke aktivitas penghapusan
+                                val intent = Intent(holder.itemView.context, DeleteBukuActivity::class.java).apply {
+                                    putExtra("idbuku", book.id)
+                                }
+                                holder.itemView.context.startActivity(intent)
+                                Toast.makeText(view.context, "Delete ${book.judulBuku}", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Tidak") { dialog, _ ->
+                                dialog.dismiss()  // Batalkan dialog
+                            }
+                            .show()
                         true
                     }
                     else -> false
@@ -94,28 +107,6 @@ RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
     fun refreshData(newbuku: List<Buku>){
         buku = newbuku
         notifyDataSetChanged()
-    }
-
-    // Fungsi untuk menampilkan dialog konfirmasi delete
-    private fun showDeleteConfirmationDialog(book: Buku, position: Int) {
-        val dialog = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null)
-        val alertDialog = AlertDialog.Builder(context)
-            .setView(dialog)
-            .create()
-        dialog.findViewById<Button>(R.id.btnCancel).setOnClickListener {
-            alertDialog.dismiss()
-        }
-
-        dialog.findViewById<Button>(R.id.btnConfirm).setOnClickListener {
-            db.deleteDataBuku(book.id)
-            (buku as MutableList<Buku>).removeAt(position)
-            notifyItemRemoved(position)
-
-            Toast.makeText(context, "${book.judulBuku} berhasil dihapus", Toast.LENGTH_SHORT).show()
-            alertDialog.dismiss()
-        }
-
-        alertDialog.show()
     }
 
 }

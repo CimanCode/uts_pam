@@ -166,7 +166,7 @@
 
                 <!-- Tombol Tambah Buku -->
                 <Button
-                    android:id="@+id/editbukubutton"
+                    android:id="@+id/tambahbukubutton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/tambahkan_buku"
