@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -15,7 +16,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.app.AlertDialog
 
-class BukuAdapter (private var buku: List<Buku>, context: Context) :
+class BukuAdapter (private var buku: List<Buku>, private val context: Context) :
 RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
 {
     private val db: DatabaseHelper = DatabaseHelper(context)
@@ -76,21 +77,28 @@ RecyclerView.Adapter<BukuAdapter.BukuViewHolder> ()
                     }
                     R.id.action_delete -> {
                         // Tampilkan dialog konfirmasi sebelum menghapus
-                        AlertDialog.Builder(view.context)
-                            .setMessage("Apakah anda yakin ingin menghapus buku ini?")
-                            .setPositiveButton("Ya") { dialog, _ ->
-                                // Jika dikonfirmasi, lanjutkan ke aktivitas penghapusan
-                                val intent = Intent(holder.itemView.context, DeleteBukuActivity::class.java).apply {
-                                    putExtra("idbuku", book.id)
-                                }
-                                holder.itemView.context.startActivity(intent)
-                                Toast.makeText(view.context, "Delete ${book.judulBuku}", Toast.LENGTH_SHORT).show()
-                                dialog.dismiss()
-                            }
-                            .setNegativeButton("Tidak") { dialog, _ ->
-                                dialog.dismiss()  // Batalkan dialog
-                            }
-                            .show()
+                        val dialogview = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null)
+                        val alertdialog = AlertDialog.Builder(view.context)
+                            .setView(dialogview)
+                            .create()
+
+                        dialogview.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+                            alertdialog.dismiss()
+                        }
+
+                        dialogview.findViewById<Button>(R.id.btnConfirm).setOnClickListener {
+                            // Hapus data dari database
+                            db.deleteBukuById(book.id)
+
+                            // Hapus item dari daftar dan beri tahu adapter
+                            (buku as MutableList<Buku>).removeAt(position)
+                            notifyItemRemoved(position)
+
+                            Toast.makeText(context, "${book.judulBuku} berhasil dihapus", Toast.LENGTH_SHORT).show()
+                            alertdialog.dismiss()
+                        }
+                        // Tampilkan dialog
+                        alertdialog.show()
                         true
                     }
                     else -> false
