@@ -19,6 +19,12 @@
         android:theme="@style/Theme.UTS_PAM"
         tools:targetApi="31">
         <activity
+            android:name=".DeleteBukuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity_delete_buku"
+            android:exported="false" />
+        <activity
             android:name=".UpdateBukuActivity"
             android:exported="false" />
         <activity

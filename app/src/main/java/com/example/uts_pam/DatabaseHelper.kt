@@ -116,4 +116,26 @@ class DatabaseHelper (context: Context) : SQLiteOpenHelper (context,
         return Buku(id, judulbuku, penulisbuku, gambarbuku, deskripsibuku)
     }
 
+    fun updateDataBuku(id: Int, image: ByteArray?, judul: String, penulis: String, deskripsi: String): Int {
+        val db = writableDatabase
+        val contentValues = ContentValues().apply {
+            put(COLUMN_JUDUL, judul)
+            put(COLUMN_PENULIS, penulis)
+            put(COLUMN_GAMBAR, image)
+            put(COLUMN_DESKRIPSI, deskripsi)
+        }
+        val success = db.update(TABLE_BUKU, contentValues, "$COLUMN_ID_BOOK=?", arrayOf(id.toString()))
+        db.close()
+        return success
+    }
+
+    fun deleteBukuById(id: Int): Int {
+        val db = writableDatabase
+        val success = db.delete(TABLE_BUKU, "$COLUMN_ID_BOOK=?", arrayOf(id.toString()))
+        db.close()
+        return success
+    }
+
+
+
 }
